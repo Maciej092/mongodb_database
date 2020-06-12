@@ -1,1 +1,2 @@
-URL = "mongodb+srv://testUser:<password>@cluster0-cywqs.mongodb.net/university?retryWrites=true&w=majority"
+host_name = 'localhost'
+port = 27017
