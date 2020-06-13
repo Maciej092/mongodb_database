@@ -9,5 +9,6 @@ class Collections:
     COLLECTION_ASSIGNMENT = 'assignment'
     COLLECTION_CLASSROOM = 'classroom'
     COLLECTION_CLASSES = 'classes'
+    COLLECTION_SUBJECT = 'subject'
     COLLECTION_STUDENT_GROUP = 'student_group'
     COLLECTION_SUBJECT_GROUP = 'subject_group'

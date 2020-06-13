@@ -3,7 +3,7 @@ from constants import DataBase as DbModule
 import traceback as TracebackModule
 
 
-class MyMongo:
+class ServerProxy:
     def __init__(self, db_name):
         self.db_name = db_name
 
@@ -11,8 +11,8 @@ class MyMongo:
 
         collection, data = data_set
         with self.get_connection() as connection:
-            connection[self.db_name][collection].insert_one(data)
-            return
+            id = connection[self.db_name][collection].insert_one(data)
+            return id.inserted_id
 
     def let_me_update(self, data_set):
 
@@ -24,13 +24,13 @@ class MyMongo:
 
         collection, pointer = data_set
         with self.get_connection() as connection:
-            connection[self.db_name][collection].find_one(pointer)
+            return connection[self.db_name][collection].find_one(pointer)
 
     def let_me_find_all(self, data_set):
 
         collection, pointer = data_set
         with self.get_connection() as connection:
-            connection[self.db_name][collection].find(pointer)
+            return connection[self.db_name][collection].find(pointer)
 
     def let_me_delete(self, data_set):
 
@@ -43,6 +43,7 @@ class MyMongo:
         return MongoClient(host=DbModule.host_name, port=DbModule.port)
 
 
+# Currently not used
 def catch_exception_decorator(func):
     def wrapper(*args, **kwargs):
         try:
