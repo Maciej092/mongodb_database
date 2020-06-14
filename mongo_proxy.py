@@ -1,6 +1,7 @@
 from pymongo import MongoClient
+from pymongo import ASCENDING
 from constants import DataBase as DbModule
-import traceback as TracebackModule
+import time
 
 
 class ServerProxy:
@@ -44,10 +45,30 @@ class ServerProxy:
         with self.get_connection() as connection:
             return connection[self.db_name][collection].find({query: {"$lte": value}})
 
+    def create_new_index(self, data_set):
+
+        collection, pointer = data_set
+        with self.get_connection() as connection:
+            return connection[self.db_name][collection].create_index([(pointer, ASCENDING)])
     @staticmethod
     def get_connection():
         return MongoClient(host=DbModule.host_name, port=DbModule.port)
 
 
 a = ServerProxy('university')
-a.query_field_value(['student', 'first_name', 'Maciejko'])
+
+# Wyszukanie "normlane"
+time_now = time.time()
+a.let_me_find_all(['student', {"first_name.full_name": "bob"}])
+time_end = time.time()
+print(time_end-time_now)
+# 0.0039904117584228516
+
+a.create_new_index(['student', "first_name.full_name"])
+
+# Wyszukanie zoptymalizowane
+time_now = time.time()
+a.let_me_find_all(['student', {"first_name.full_name": "bob"}])
+time_end = time.time()
+print(time_end-time_now)
+# 0.002959012985229492

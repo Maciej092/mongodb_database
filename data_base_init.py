@@ -16,6 +16,7 @@ class DataBase:
     def __init__(self, db_name):
         self.db_name = db_name
         self.db = ServerProxy(self.db_name)
+        self.init_student(12,'bob','bobby','boom')
 
     @catch_exception_decorator
     def init_student(self, id, f_name, n_name, l_name):
@@ -82,12 +83,13 @@ class DataBase:
             "schema_version": Cls.SCHEMA_VERSION
         }])
 
-    def subject_minor_info(self, subject_id, ects, description, hours):
+    def subject_minor_info(self, subject_id, ects, description, hours, field_id):
         subj_minor_1 = self.db.let_me_insert([Cls.COLLECTION_SUBJECT_MINOR, {
             "subject_id": subject_id,
             "ects": ects,
             "description": description,
-            "hours_number": hours
+            "hours_number": hours,
+            "field_of_study_id": field_id
         }])
 
     @catch_exception_decorator
@@ -142,4 +144,3 @@ class DataBase:
 
 
 db = DataBase('university')
-db.init_field_of_study()
