@@ -38,17 +38,16 @@ class ServerProxy:
         with self.get_connection() as connection:
             connection[self.db_name][collection].delete_one(pointer)
 
+    def query_field_value(self, data_set):
+
+        collection, query, value = data_set
+        with self.get_connection() as connection:
+            return connection[self.db_name][collection].find({query: {"$lte": value}})
+
     @staticmethod
     def get_connection():
         return MongoClient(host=DbModule.host_name, port=DbModule.port)
 
 
-# Currently not used
-def catch_exception_decorator(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except:
-            TracebackModule.print_exc()
-            return None
-    return wrapper
+a = ServerProxy('university')
+a.query_field_value(['student', 'first_name', 'Maciejko'])
